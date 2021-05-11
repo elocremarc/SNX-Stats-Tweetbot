@@ -1,0 +1,1 @@
+{"scripts":{"start":"node index.js"},"dependencies":{"dotenv":"^9.0.2","synthetix-js":"^2.44.0","twitter":"^1.7.1"}}
