@@ -10,9 +10,9 @@ const client = new Twitter({
 
 function postTweet(tweet) {
   return new Promise((resolve, reject) => {
-    let params = {status:  `${tweet}`};
+    let params = { status: `${tweet}` };
 
-    client.post('statuses/update', params, (err, data) => {
+    client.post("statuses/update", params, (err, data) => {
       if (err) {
         console.log(err);
         return reject(err);
@@ -23,7 +23,6 @@ function postTweet(tweet) {
   });
 }
 
-
 console.log("Starting the twitter bot ...");
 
-postTweet()
+postTweet();

@@ -1,4 +1,7 @@
 import snxData from "synthetix-data";
+import { synthetix, Network } from "@synthetixio/contracts-interface";
+
+const snxjs = synthetix({ network: Network.Mainnet });
 
 let value = 0;
 let rewards = 0;
@@ -7,8 +10,14 @@ let susdCollat = 0;
 let snxHolders = 0;
 let snxRewardsBal = 0;
 let snxRewardsBalVes = 0;
+let tradeVolumeDay = 0;
+let tradeVolumeWeek = 0;
+let tradeVolumeMonth = 0;
+let feesDay = 0;
+let tradesDay = 0;
+let avgTradeSizeDay = 0;
 
-const getExhangeData = async () => {
+export const getExhangeData = async () => {
   //Get the FeesClaimed events in reverse chronological order, showing fees in sUSD and rewards in SNX.
   let fees = await snxData.snx.feesClaimed();
   fees.forEach((instance) => {
@@ -38,6 +47,47 @@ const getExhangeData = async () => {
     snxRewardsBal += instance.balance;
     snxRewardsBalVes += instance.vestedBalanceOf;
   });
+  const ts = Math.floor(Date.now() / 1e3);
+  const oneDayAgo = ts - 3600 * 24;
+
+  await snxData.exchanges
+    .since({
+      minTimestamp: oneDayAgo, // one week ago
+    })
+    .then((exchanges, index) =>
+      exchanges.forEach((trade) => {
+        tradesDay++;
+        feesDay += trade.feesInUSD;
+        tradeVolumeDay += trade.fromAmountInUSD;
+        avgTradeSizeDay = trade.fromAmountInUSD + avgTradeSizeDay;
+        if (index === snxRewards.length - 1) {
+          avgTradeSizeDay = avgTradeSizeDay / tradesDay;
+        }
+      })
+    );
+  //Get Weekly Volume
+  await snxData.exchanges
+
+    .since({
+      minTimestamp: Math.floor(Date.now() / 1e3) - 3600 * 24 * 7, // one week ago
+    })
+    .then((exchanges) =>
+      exchanges.forEach((trade) => {
+        tradeVolumeWeek += trade.fromAmountInUSD;
+      })
+    );
+  //Get Monthly Volume
+  await snxData.exchanges
+
+    .since({
+      minTimestamp: Math.floor(Date.now() / 1e3) - 3600 * 24 * 30, // 30 days ago
+    })
+    .then((exchanges) =>
+      exchanges.forEach((trade) => {
+        tradeVolumeMonth += trade.fromAmountInUSD;
+      })
+    );
+
   return {
     susdCollat,
     sethCollat,
@@ -46,7 +96,11 @@ const getExhangeData = async () => {
     rewards,
     snxRewardsBal,
     snxRewardsBalVes,
+    tradeVolumeDay,
+    tradeVolumeWeek,
+    tradeVolumeMonth,
+    feesDay,
+    tradesDay,
+    avgTradeSizeDay,
   };
 };
-const newdata = await getExhangeData();
-console.log(newdata);

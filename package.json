@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "start": "nodemon snx-stats-top.js"
+    "start": "nodemon index.js"
   },
   "type": "module",
   "dependencies": {
+    "@synthetixio/contracts-interface": "^2.45.2",
     "comma-number": "^2.1.0",
     "dotenv": "^9.0.2",
     "ethers": "^4.0.44",
