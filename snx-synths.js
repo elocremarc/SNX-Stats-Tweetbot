@@ -1,7 +1,9 @@
 import { synthetix } from "@synthetixio/contracts-interface";
 import dotenv from "dotenv";
-dotenv.config();
 
+dotenv.config();
+const synthetixSnx =
+  "https://api.thegraph.com/subgraphs/name/synthetixio-team/synthetix";
 // Providers
 // const network = "homestead";
 // const provider = ethers.getDefaultProvider(network, {
@@ -30,7 +32,25 @@ export const loadSynthData = async () => {
       blockOptions
     ); // note blockOptions must be passed to `ethers.Contract` as the final parameter (and fails if no archive node)
   snxPrice = formatEther(unformattedSnxPrice);
-  console.log("snxPrice", snxPrice);
+  let totalIssuedSynths =
+    await snxjs.contracts.Synthetix.totalIssuedSynthsExcludeEtherCollateral(
+      snxjs.toBytes32("sUSD")
+    );
+  totalIssuedSynths = Number(formatEther(totalIssuedSynths));
+  const tempIssuanceRatio = Number(
+    snxjs.utils.formatEther(
+      await snxjs.contracts.SystemSettings.issuanceRatio()
+    )
+  );
+  const lastDebtLedgerEntry = Number(
+    snxjs.utils.formatEther(
+      await snxjs.contracts.SynthetixState.lastDebtLedgerEntry()
+    )
+  );
+  let snxTotalSupply = await snxjs.contracts.Synthetix.totalSupply();
+  snxTotalSupply = Number(formatEther(snxTotalSupply));
+  const snxMarketCap = snxTotalSupply * snxPrice;
+
   const synthData = synths.map(async (synth) => {
     //Get Synth Supply
     const totalAmount = await snxjs.contracts[`Synth${synth.name}`].totalSupply(
@@ -74,6 +94,22 @@ export const loadSynthData = async () => {
     }
     return totalSynthMarketCap;
   });
+  const cRatio = Math.round((snxMarketCap / totalIssuedSynths) * 100);
+
+  // console.log(
+  //   "snxPrice",
+  //   snxPrice,
+  //   "snxTotalSupply",
+  //   snxTotalSupply,
+  //   "MarketCap",
+  //   snxMarketCap,
+  //   "total Synths",
+  //   totalIssuedSynths,
+  //   "totalSynthMarketCap",
+  //   totalSynthMarketCap,
+  //   "c-ratio",
+  //   cRatio
+  // );
   let synthWeights = newSynthData.map((synth) => {
     const dominance = (synth.synthMarketCap / totalSynthMarketCap) * 100;
     const name = synth.name;
@@ -94,12 +130,12 @@ export const loadSynthData = async () => {
       dominance,
     };
   });
-  synthWeights = synthWeights.sort((a, b) =>
+  let sortedSynthWeights = synthWeights.sort((a, b) =>
     a.dominance > b.dominance ? -1 : 1
   );
-  let top5 = synthWeights.splice(0, 5);
-  let top3 = synthWeights.splice(0, 3);
 
+  let top5 = sortedSynthWeights.slice(0, 5);
+  let top3 = sortedSynthWeights.slice(0, 3);
   let totalPercent = 0;
   top5.forEach((top) => {
     totalPercent += top.dominance;
@@ -107,5 +143,18 @@ export const loadSynthData = async () => {
   let percentOthers = 100 - totalPercent;
   top5.push({ name: "Other", dominance: percentOthers });
   top5 = top5.sort((a, b) => (a.dominance > b.dominance ? -1 : 1));
-  return { top3, top5 };
+  return {
+    top3,
+    top5,
+    cRatio,
+    lastDebtLedgerEntry,
+    tempIssuanceRatio,
+    snxMarketCap,
+    snxPrice,
+    snxTotalSupply,
+    totalIssuedSynths,
+    totalSynthMarketCap,
+  };
 };
+// let data = await loadSynthData();
+// console.log(data);

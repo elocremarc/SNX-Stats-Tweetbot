@@ -1,5 +1,6 @@
 import snxData from "synthetix-data";
 import { synthetix, Network } from "@synthetixio/contracts-interface";
+import { loadSynthData } from "./snx-synths.js";
 
 const snxjs = synthetix({ network: Network.Mainnet });
 
@@ -47,6 +48,48 @@ export const getExhangeData = async () => {
     snxRewardsBal += instance.balance;
     snxRewardsBalVes += instance.vestedBalanceOf;
   });
+  let synthData = await loadSynthData();
+
+  let snxTotalQuery = 0;
+  let snxLockedQuery = 0;
+  let stakersTotalDebt = 0;
+  let stakersTotalCollateral = 0;
+  let totalIssuedSynths = synthData.totalIssuedSynths;
+  let usdToSnxPrice = synthData.snxPrice;
+  let tempIssuanceRatio = synthData.tempIssuanceRatio;
+  let lastDebtLedgerEntry = synthData.lastDebtLedgerEntry;
+  let snxMarketCap = synthData.snxMarketCap;
+  let cRatio = synthData.cRatio;
+
+  const holders = await snxData.snx.holders({ max: 1000 });
+  holders.forEach(({ collateral, debtEntryAtIndex, initialDebtOwnership }) => {
+    const collateralFmt = collateral;
+    const debtEntryAtIndexFmt = debtEntryAtIndex;
+    const initialDebtOwnershipFmt = initialDebtOwnership;
+
+    let debtBalance =
+      ((totalIssuedSynths * lastDebtLedgerEntry) / debtEntryAtIndexFmt) *
+      initialDebtOwnershipFmt;
+    initialDebtOwnershipFmt;
+    let collateralRatio = debtBalance / collateralFmt / usdToSnxPrice;
+
+    if (isNaN(debtBalance)) {
+      debtBalance = 0;
+      collateralRatio = 0;
+    }
+    const lockedSnx =
+      collateralFmt * Math.min(1, collateralRatio / tempIssuanceRatio);
+
+    if (Number(debtBalance) > 0) {
+      stakersTotalDebt += Number(debtBalance);
+      stakersTotalCollateral += Number(collateralFmt * usdToSnxPrice);
+    }
+    snxTotalQuery += Number(collateralFmt);
+    snxLockedQuery += Number(lockedSnx);
+  });
+  const snxPercentStaked = snxLockedQuery / snxTotalQuery;
+  const snxStaked = snxMarketCap * snxPercentStaked;
+
   const ts = Math.floor(Date.now() / 1e3);
   const oneDayAgo = ts - 3600 * 24;
 
@@ -102,5 +145,10 @@ export const getExhangeData = async () => {
     feesDay,
     tradesDay,
     avgTradeSizeDay,
+    snxPercentStaked,
+    snxMarketCap,
+    snxStaked,
+    cRatio,
+    usdToSnxPrice,
   };
 };

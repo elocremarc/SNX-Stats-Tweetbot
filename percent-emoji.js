@@ -54,15 +54,20 @@ export const emojifyNumber = (number) => {
   return num;
 };
 
+export const percentEmoji = (percent) => {
+  let emojiPercent;
+  if (percent < 10) {
+    emojiPercent = "0️⃣" + emojifyNumber(percent) + " % ";
+  } else {
+    emojiPercent = emojifyNumber(percent) + " % ";
+  }
+  return emojiPercent;
+};
+
 export const percentEmojiGraph = (percent) => {
   let barGraph = (Math.round(percent / 10) * 10) / 10;
 
-  let renderdGraph;
-  if (percent < 10) {
-    renderdGraph = "0️⃣" + emojifyNumber(percent) + " % ";
-  } else {
-    renderdGraph = emojifyNumber(percent) + " % ";
-  }
+  let renderdGraph = "";
 
   for (let i = 0; i < 10; i++) {
     if (i < barGraph) {

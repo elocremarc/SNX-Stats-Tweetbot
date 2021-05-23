@@ -1,5 +1,6 @@
-require("dotenv").config();
-const Twitter = require("twitter");
+import dotenv from "dotenv";
+import Twitter from "twitter";
+dotenv.config();
 
 const client = new Twitter({
   consumer_key: process.env.TWITTER_API_KEY,
@@ -8,7 +9,7 @@ const client = new Twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
-function postTweet(tweet) {
+export const postTweet = (tweet) => {
   return new Promise((resolve, reject) => {
     let params = { status: `${tweet}` };
 
@@ -21,8 +22,4 @@ function postTweet(tweet) {
       return resolve(data);
     });
   });
-}
-
-console.log("Starting the twitter bot ...");
-
-postTweet();
+};
