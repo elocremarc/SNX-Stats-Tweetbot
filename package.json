@@ -6,7 +6,6 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "type": "module",
   "dependencies": {
     "@synthetixio/contracts-interface": "^2.45.2",
     "comma-number": "^2.1.0",

@@ -1,10 +1,10 @@
-import { tweetSNX } from "../index";
+//import { tweetSNX } from "../index";
 
 module.exports = async function (context, myTimer) {
   var timeStamp = new Date().toISOString();
   console.log("starting...");
   try {
-    await tweetSNX();
+    // await tweetSNX();
     console.log("sucesful tweet");
   } catch (error) {
     console.log("failed tweet");
