@@ -8,10 +8,12 @@ import {
   snxTweet,
 } from "./tweetTemplate.js";
 import { postTweet } from "./tweet.js";
-const tweetSNX = async () => {
+export const tweetSNX = async () => {
+  console.log("getting data...");
   const exhangeData = await getExhangeData();
   const synthData = await loadSynthData();
   const random = Math.floor(Math.random() * 4);
+  console.log("choosing tweet:" + random);
   switch (random) {
     case 1:
       postTweet(domTweet(synthData.top5));
@@ -27,5 +29,3 @@ const tweetSNX = async () => {
       break;
   }
 };
-
-tweetSNX();
