@@ -1,8 +1,11 @@
 {
+  "name": "snx-stats-tweetbot",
+  "version": "1.0.0",
+  "description": "",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
   },
-  "type": "module",
   "dependencies": {
     "@synthetixio/contracts-interface": "^2.45.2",
     "comma-number": "^2.1.0",

@@ -1,15 +1,15 @@
-import {
+const {
   percentEmojiGraph,
   emojifyNumber,
   percentEmoji,
-} from "./percent-emoji.js";
-import commaNumber from "comma-number";
+} = require("./percent-emoji.js");
+const commaNumber = require("comma-number");
 
-export const whaleTweet = () => {
+const whaleTweet = () => {
   `🚨🐳🟪 SYNTH WHALE ALERT 🟪🐳🚨`;
 };
 
-export const domTweet = (top5) => {
+const domTweet = (top5) => {
   let tweet = `🟪 SYNTH DOMINANCE 🟪
 
 ${percentEmoji(Math.round(top5[0].dominance))} 🤖 ${top5[0].name}
@@ -31,7 +31,7 @@ ${percentEmoji(Math.round(top5[5].dominance))} 🤖 ${top5[5].name}
 ${percentEmojiGraph(Math.round(top5[5].dominance))} `;
   return tweet;
 };
-export const top3Tweet = (top3) => {
+const top3Tweet = (top3) => {
   let tweet = `🟪TOP 3 SYNTHS BY MARKET CAP🟪
 
 $${top3[0].name} $${emojifyNumber(
@@ -49,7 +49,7 @@ $${top3[2].name} $${emojifyNumber(
   return tweet;
 };
 
-export const exchangeTweet = (snxdata) => {
+const exchangeTweet = (snxdata) => {
   let tweet = `🟪 SYNTH TRADES TODAY 🟪
 
 🔊 Volume  $${emojifyNumber(commaNumber(Math.round(snxdata.tradeVolumeDay)))}
@@ -64,7 +64,7 @@ export const exchangeTweet = (snxdata) => {
   return tweet;
 };
 
-export const snxTweet = (snxdata) => {
+const snxTweet = (snxdata) => {
   let snxPrice = snxdata.usdToSnxPrice;
   let snxPriceRnd = parseFloat(snxPrice).toFixed(2);
   let tweet = `🟪 SNX NETWORK STATS 🟪
@@ -89,4 +89,6 @@ $${emojifyNumber(commaNumber(Math.round(snxdata.snxStaked)))}
   return tweet;
 };
 
-export const forexTweet = (forexdata) => {};
+const forexTweet = (forexdata) => {};
+
+module.exports = { domTweet, top3Tweet, exchangeTweet, snxTweet };

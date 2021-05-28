@@ -1,17 +1,18 @@
-import { synthetix } from "@synthetixio/contracts-interface";
-import dotenv from "dotenv";
+const { synthetix } = require("@synthetixio/contracts-interface");
+const dotenv = require("dotenv");
+const ethers = require("ethers");
 
 dotenv.config();
 const synthetixSnx =
   "https://api.thegraph.com/subgraphs/name/synthetixio-team/synthetix";
-// Providers
-// const network = "homestead";
-// const provider = ethers.getDefaultProvider(network, {
-//   etherscan: process.env.YOUR_ETHERSCAN_API_KEY,
-//   infura: process.env.YOUR_INFURA_PROJECT_ID,
-//   alchemy: process.env.YOUR_ALCHEMY_API_KEY,
-// });
-export const loadSynthData = async () => {
+//Providers
+const network = "homestead";
+const provider = ethers.getDefaultProvider(network, {
+  etherscan: process.env.YOUR_ETHERSCAN_API_KEY,
+  infura: process.env.YOUR_INFURA_PROJECT_ID,
+  alchemy: process.env.YOUR_ALCHEMY_API_KEY,
+});
+const loadSynthData = async () => {
   let synths;
   let snxPrice;
   let totalSynthMarketCap = 0;
@@ -19,6 +20,7 @@ export const loadSynthData = async () => {
   // this instance exposes props for the given network: synths, sources, targets, users, as well as helper function toBytes32 - as per synthetix: https://github.com/Synthetixio/synthetix/blob/develop/index.js#L199.
   const snxjs = synthetix({
     network: "mainnet",
+    provider: provider,
   });
 
   const { formatEther } = snxjs.utils;
@@ -158,3 +160,4 @@ export const loadSynthData = async () => {
 };
 // let data = await loadSynthData();
 // console.log(data);
+module.exports = { loadSynthData };

@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-import Twitter from "twitter";
+const dotenv = require("dotenv");
+const Twitter = require("twitter");
 dotenv.config();
 
 const client = new Twitter({
@@ -9,7 +9,7 @@ const client = new Twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
-export const postTweet = (tweet) => {
+const postTweet = (tweet) => {
   return new Promise((resolve, reject) => {
     let params = { status: `${tweet}` };
 
@@ -23,3 +23,5 @@ export const postTweet = (tweet) => {
     });
   });
 };
+
+module.exports = { postTweet };
