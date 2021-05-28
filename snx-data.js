@@ -1,6 +1,6 @@
-import snxData from "synthetix-data";
-import { synthetix, Network } from "@synthetixio/contracts-interface";
-import { loadSynthData } from "./snx-synths.js";
+const snxData = require("synthetix-data");
+const { synthetix, Network } = require("@synthetixio/contracts-interface");
+const { loadSynthData } = require("./snx-synths.js");
 
 const snxjs = synthetix({ network: Network.Mainnet });
 
@@ -18,7 +18,7 @@ let feesDay = 0;
 let tradesDay = 0;
 let avgTradeSizeDay = 0;
 
-export const getExhangeData = async () => {
+const getExhangeData = async () => {
   //Get the FeesClaimed events in reverse chronological order, showing fees in sUSD and rewards in SNX.
   let fees = await snxData.snx.feesClaimed();
   fees.forEach((instance) => {
@@ -152,3 +152,4 @@ export const getExhangeData = async () => {
     usdToSnxPrice,
   };
 };
+module.exports = { getExhangeData };

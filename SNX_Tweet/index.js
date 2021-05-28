@@ -1,14 +1,14 @@
-//import { tweetSNX } from "../index";
+const { tweetSNX } = require("../index");
 
 module.exports = async function (context, myTimer) {
   var timeStamp = new Date().toISOString();
-  console.log("starting...");
+  context.log("starting...");
   try {
-    // await tweetSNX();
-    console.log("sucesful tweet");
+    await tweetSNX();
+    context.log("sucesful tweet");
   } catch (error) {
-    console.log("failed tweet");
-    console.log(error);
+    context.log("failed tweet");
+    context.log(error);
   }
   if (myTimer.isPastDue) {
     context.log("JavaScript is running late!");

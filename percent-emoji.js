@@ -1,4 +1,4 @@
-export const emojifyNumber = (number) => {
+const emojifyNumber = (number) => {
   let numbersplit = String(number).split("");
   let num = "";
 
@@ -54,7 +54,7 @@ export const emojifyNumber = (number) => {
   return num;
 };
 
-export const percentEmoji = (percent) => {
+const percentEmoji = (percent) => {
   let emojiPercent;
   if (percent < 10) {
     emojiPercent = "0️⃣" + emojifyNumber(percent) + " % ";
@@ -64,7 +64,7 @@ export const percentEmoji = (percent) => {
   return emojiPercent;
 };
 
-export const percentEmojiGraph = (percent) => {
+const percentEmojiGraph = (percent) => {
   let barGraph = (Math.round(percent / 10) * 10) / 10;
 
   let renderdGraph = "";
@@ -78,3 +78,5 @@ export const percentEmojiGraph = (percent) => {
   }
   return renderdGraph;
 };
+
+module.exports = { percentEmojiGraph, percentEmoji, emojifyNumber };

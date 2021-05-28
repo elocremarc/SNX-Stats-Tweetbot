@@ -1,6 +1,6 @@
-import { synthetix } from "@synthetixio/contracts-interface";
-import dotenv from "dotenv";
-import ethers from "ethers";
+const { synthetix } = require("@synthetixio/contracts-interface");
+const dotenv = require("dotenv");
+const ethers = require("ethers");
 
 dotenv.config();
 const synthetixSnx =
@@ -12,7 +12,7 @@ const provider = ethers.getDefaultProvider(network, {
   infura: process.env.YOUR_INFURA_PROJECT_ID,
   alchemy: process.env.YOUR_ALCHEMY_API_KEY,
 });
-export const loadSynthData = async () => {
+const loadSynthData = async () => {
   let synths;
   let snxPrice;
   let totalSynthMarketCap = 0;
@@ -160,3 +160,4 @@ export const loadSynthData = async () => {
 };
 // let data = await loadSynthData();
 // console.log(data);
+module.exports = { loadSynthData };
