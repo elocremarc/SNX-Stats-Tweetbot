@@ -34,17 +34,11 @@ ${percentEmojiGraph(Math.round(top5[5].dominance))} `;
 const top3Tweet = (top3) => {
   let tweet = `🟪TOP 3 SYNTHS BY MARKET CAP🟪
 
-$${top3[0].name} $${emojifyNumber(
-    commaNumber(Math.round(top3[0].synthMarketCap))
-  )}
+$${top3[0].name} $${commaNumber(Math.round(top3[0].synthMarketCap))}
 
-$${top3[1].name} $${emojifyNumber(
-    commaNumber(Math.round(top3[1].synthMarketCap))
-  )}
+$${top3[1].name} $${commaNumber(Math.round(top3[1].synthMarketCap))}
 
-$${top3[2].name} $${emojifyNumber(
-    commaNumber(Math.round(top3[2].synthMarketCap))
-  )}
+$${top3[2].name} $${commaNumber(Math.round(top3[2].synthMarketCap))}
   `;
   return tweet;
 };
@@ -52,15 +46,13 @@ $${top3[2].name} $${emojifyNumber(
 const exchangeTweet = (snxdata) => {
   let tweet = `🟪 SYNTH TRADES TODAY 🟪
 
-🔊 Volume  $${emojifyNumber(commaNumber(Math.round(snxdata.tradeVolumeDay)))}
+🔊 Volume  $${commaNumber(Math.round(snxdata.tradeVolumeDay))}
 
-💸 Fees Collected $${emojifyNumber(commaNumber(Math.round(snxdata.feesDay)))}
+💸 Fees Collected $${commaNumber(Math.round(snxdata.feesDay))}
 
-#️⃣ Number of Trades ${emojifyNumber(commaNumber(Math.round(snxdata.tradesDay)))}
+#️⃣ Number of Trades ${commaNumber(Math.round(snxdata.tradesDay))}
 
-⚖️ Average Trade Size $${emojifyNumber(
-    commaNumber(Math.round(snxdata.avgTradeSizeDay))
-  )}`;
+⚖️ Average Trade Size $${commaNumber(Math.round(snxdata.avgTradeSizeDay))}`;
   return tweet;
 };
 
@@ -69,23 +61,19 @@ const snxTweet = (snxdata) => {
   let snxPriceRnd = parseFloat(snxPrice).toFixed(2);
   let tweet = `🟪 SNX NETWORK STATS 🟪
 
-💸 $SNX Price $${emojifyNumber(commaNumber(snxPriceRnd))}
+💸 $SNX Price $${commaNumber(snxPriceRnd)}
 
-#️⃣ $SNX Holders ${emojifyNumber(commaNumber(snxdata.snxHolders))}
+#️⃣ $SNX Holders ${commaNumber(snxdata.snxHolders)}
 
 🧢 $SNX Market Cap
-$${emojifyNumber(commaNumber(Math.round(snxdata.snxMarketCap)))}
+$${commaNumber(Math.round(snxdata.snxMarketCap))}
 
 🥩 $SNX Staked
-$${emojifyNumber(commaNumber(Math.round(snxdata.snxStaked)))}
+$${commaNumber(Math.round(snxdata.snxStaked))}
 
-💪 % Staked ${emojifyNumber(
-    commaNumber(Math.round(snxdata.snxPercentStaked * 100))
-  )}%
+💪 % Staked ${commaNumber(Math.round(snxdata.snxPercentStaked * 100))}%
 
-🏦 Collateralization Ratio ${emojifyNumber(
-    commaNumber(Math.round(snxdata.cRatio))
-  )}%`;
+🏦 Collateralization Ratio ${commaNumber(Math.round(snxdata.cRatio))}%`;
   return tweet;
 };
 

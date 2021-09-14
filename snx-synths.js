@@ -135,7 +135,12 @@ const loadSynthData = async () => {
   let sortedSynthWeights = synthWeights.sort((a, b) =>
     a.dominance > b.dominance ? -1 : 1
   );
-
+  // sortedSynthWeights.forEach((element) => {
+  //   if (element.category === "equities") {
+  //     console.log(element);
+  //   }
+  // });
+  //console.log(sortedSynthWeights);
   let top5 = sortedSynthWeights.slice(0, 5);
   let top3 = sortedSynthWeights.slice(0, 3);
   let totalPercent = 0;
@@ -158,6 +163,6 @@ const loadSynthData = async () => {
     totalSynthMarketCap,
   };
 };
-// let data = await loadSynthData();
+// loadSynthData();
 // console.log(data);
 module.exports = { loadSynthData };
